@@ -1,0 +1,16 @@
+net: "train_val.prototxt"
+test_iter: 571            
+test_interval: 2500
+test_initialization: true
+display: 40
+average_loss: 40
+base_lr: 0.01
+lr_policy: "step"
+stepsize: 2500
+gamma: 0.75
+max_iter: 50000
+momentum: 0.9
+weight_decay: 0.0002
+snapshot: 2500
+snapshot_prefix: "models/reid_20161208"
+solver_mode: GPU
