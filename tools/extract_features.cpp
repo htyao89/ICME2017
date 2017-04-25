@@ -1,3 +1,8 @@
+
+#include<iostream>
+#include<fstream>
+using namespace std;
+
 #include <string>
 #include <vector>
 
@@ -109,6 +114,9 @@ int feature_extraction_pipeline(int argc, char** argv) {
   CHECK_EQ(blob_names.size(), dataset_names.size()) <<
       " the number of blob names and dataset names must be equal";
   size_t num_features = blob_names.size();
+    
+  std::string save_file = dataset_names[0]+".txt";
+  ofstream out(save_file.c_str());
 
   for (size_t i = 0; i < num_features; i++) {
     CHECK(feature_extraction_net->has_blob(blob_names[i]))
@@ -152,9 +160,10 @@ int feature_extraction_pipeline(int argc, char** argv) {
             feature_blob->offset(n);
         for (int d = 0; d < dim_features; ++d) {
           datum.add_float_data(feature_blob_data[d]);
+            out<<feature_blob_data[d]<<" ";
         }
         string key_str = caffe::format_int(image_indices[i], 10);
-
+          out<<"\n";
         string out;
         CHECK(datum.SerializeToString(&out));
         txns.at(i)->Put(key_str, out);
@@ -177,7 +186,7 @@ int feature_extraction_pipeline(int argc, char** argv) {
         " query images for feature blob " << blob_names[i];
     feature_dbs.at(i)->Close();
   }
-
+out.close();
   LOG(ERROR)<< "Successfully extracted the features!";
   return 0;
 }
